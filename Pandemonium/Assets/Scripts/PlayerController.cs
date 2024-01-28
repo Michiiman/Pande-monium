@@ -2,21 +2,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f; // Velocidad de movimiento
+    public float speed = 5f; 
     [SerializeField] private Animator animator;
+    [SerializeField] private GameObject roller;
     void Update()
     {
-        // Obtener las entradas del teclado
+        if(GameManager.Instance.CurrentState != GameState.Gameplay) return;
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-
-        // Calcular el vector de movimiento
         Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput) * speed * Time.deltaTime;
-
-        // Mover el objeto
         transform.Translate(movement);
        
-        
+        // anims
         if (Input.GetKeyDown(KeyCode.S))
         {
             animator.SetBool("Down", true);
@@ -50,5 +47,13 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("Left", false);
         }
+    }
+
+
+    private void PlayerAttack()
+    {
+        
+        
+        
     }
 }
