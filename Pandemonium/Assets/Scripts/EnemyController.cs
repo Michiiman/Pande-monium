@@ -1,13 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public Transform Cube  ; 
+    private Transform Cube  ; 
     public float speed = 5f;
-
-    
+    public AudioSource deathSound;
+    public bool isAlive = true;
     void Start()
     {
        Cube = GameManager.Instance.player.transform;
@@ -16,21 +17,35 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        if( GameManager.Instance.CurrentState != GameState.Gameplay) return;
+        if(!isAlive) return;
         if (Cube != null)
         {
-            // Calcula la dirección hacia el objetivo
+            // Calcula la direcciï¿½n hacia el objetivo
             Vector3 direction = Cube.position - transform.position;
 
-            // Normaliza la dirección para mantener una velocidad constante
+            // Normaliza la direcciï¿½n para mantener una velocidad constante
             Vector3 normalizedDirection = direction.normalized;
 
-            // Calcula la nueva posición hacia la cual se moverá el objeto
+            // Calcula la nueva posiciï¿½n hacia la cual se moverï¿½ el objeto
             Vector3 newPosition = transform.position + normalizedDirection * speed * Time.deltaTime;
 
-            // Mueve el objeto hacia la nueva posición
+            // Mueve el objeto hacia la nueva posiciï¿½n
             transform.position = newPosition;
             
         }
     }
 
+    public void DeathSound()
+    {
+        deathSound.Play();
+        StartCoroutine(Death());
+    }
+
+    private IEnumerator Death()
+    {
+        isAlive = false;
+        yield return new WaitForSeconds((float)deathSound.clip.length);
+        Destroy(gameObject);
+    }
 }
