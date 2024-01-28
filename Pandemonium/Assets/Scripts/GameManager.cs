@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public GameState CurrentState = GameState.Setup;
     public static GameManager Instance { get; private set; }
     public event Action<GameState> OnStateChanged;
-  [SerializeField] private PlayerController player;
+    public PlayerController player;
 
 
     private void Awake()
